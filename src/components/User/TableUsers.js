@@ -3,11 +3,16 @@ import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { fetchAllUser } from '../../services/UserServices';
 import ReactPaginate from 'react-paginate';
+import ModalAddNew from './ModalAddNew';
 
 const TableUsers = () => {
     const [listUsers, setlistUsers] = useState([]);
     const [TotalUsers, setTotalUsers] = useState(0);
     const [TotalPage, setTotalPage] = useState(0);
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     useEffect(() => {
         getUsers(1);
@@ -21,12 +26,18 @@ const TableUsers = () => {
             setlistUsers(res.data);
         }
     }
-    const handlePageClick =(event)=>{
-        getUsers(+event.selected+1);
+    const handlePageClick = (event) => {
+        getUsers(+event.selected + 1);
     }
-
+    const handleListUsersChild = (newListUser )=>{
+        setlistUsers(newListUser)
+    }
     return (
         <div className='mt-5'>
+            <div className='d-flex justify-content-between m-2'>
+                <strong>List Users</strong>
+                <button className='btn btn-primary' onClick={handleShow}>Add new user</button>
+            </div>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -57,25 +68,32 @@ const TableUsers = () => {
                 </tbody>
             </Table>
             <ReactPaginate
-        nextLabel="next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={3}
-        marginPagesDisplayed={2}
-        pageCount={TotalPage}
-        previousLabel="< previous"
-        pageClassName="page-item"
-        pageLinkClassName="page-link"
-        previousClassName="page-item"
-        previousLinkClassName="page-link"
-        nextClassName="page-item"
-        nextLinkClassName="page-link"
-        breakLabel="..."
-        breakClassName="page-item"
-        breakLinkClassName="page-link"
-        containerClassName="pagination"
-        activeClassName="active"
-        renderOnZeroPageCount={null}
-      />
+                nextLabel="next >"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={TotalPage}
+                previousLabel="< previous"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+            />
+            <ModalAddNew 
+            handleShow={handleShow}
+            handleClose={handleClose}
+            show = {show}
+            handleListUsersChild = {handleListUsersChild}
+            listUsers = {listUsers}
+            />
         </div>
     )
 }
