@@ -1,7 +1,7 @@
 import instance from "./CustomizeAxios";
 
-const fetchAllUser = ()=>{
-    return instance.get('/api/users?page=1')
+const fetchAllUser = (page)=>{
+    return instance.get(`/api/users?page=${page}`)
        
     }
 
