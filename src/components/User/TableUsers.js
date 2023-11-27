@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import { fetchAllUser } from '../../services/UserServices';
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
-import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined, SortDescendingOutlined, SortAscendingOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from "antd";
 import ModalEditUser from './ModalEditUser';
 import _ from 'lodash';
@@ -19,6 +19,8 @@ const TableUsers = () => {
     const [showDeleteUser, setShowDeleteUser] = useState(false);
     const [dataUserEdit, setDataUserEdit] = useState({});
     const [dataUserDelete, setDataUserDelete] = useState({});
+    const [sortBy, setSortBy] = useState('asc');
+    const [sortField, setSortField] = useState('id');
 
     const handleClose = () => {
         setShowAddUser(false);
@@ -71,6 +73,15 @@ const TableUsers = () => {
 
     }
 
+    const handleSort = (sortBy, sortField) => {
+        setSortBy(sortBy);
+        setSortField(sortField);
+        let cloneListUser = _.cloneDeep(listUsers);
+        cloneListUser = _.orderBy(cloneListUser, [sortField],[sortBy]);
+        setlistUsers(cloneListUser);
+    }
+    console.log('check sort ', sortBy, sortField);
+
 
     return (
         <div className='mt-5'>
@@ -81,10 +92,32 @@ const TableUsers = () => {
             <Table striped bordered hover>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th className='d-flex justify-content-between'>
+                            <span>ID</span>
+                            <span>
+                                <SortAscendingOutlined
+                                    onClick={() => handleSort('asc', 'id')}
+                                />
+                                <SortDescendingOutlined
+                                    onClick={() => handleSort('desc', 'id')}
+
+                                />
+                            </span>
+                        </th>
                         <th>Avatar</th>
                         <th>Email</th>
-                        <th>First Name</th>
+                        <th className='d-flex justify-content-between'>
+                            <span>First Name</span>
+                            <span>
+                                <SortAscendingOutlined
+                                    onClick={() => handleSort('asc', 'first_name')}
+                                />
+                                <SortDescendingOutlined
+                                    onClick={() => handleSort('desc', 'first_name')}
+
+                                />
+                            </span>
+                        </th>
                         <th>Last Name</th>
                         <th>Action</th>
                     </tr>
