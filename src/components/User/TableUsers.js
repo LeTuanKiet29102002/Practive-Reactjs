@@ -7,7 +7,7 @@ import ModalAddNew from './ModalAddNew';
 import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined, SortDescendingOutlined, SortAscendingOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from "antd";
 import ModalEditUser from './ModalEditUser';
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import ModalConfirm from './ModalConfirm';
 
 const TableUsers = () => {
@@ -21,6 +21,7 @@ const TableUsers = () => {
     const [dataUserDelete, setDataUserDelete] = useState({});
     const [sortBy, setSortBy] = useState('asc');
     const [sortField, setSortField] = useState('id');
+    const [keyword, setKeyWord] = useState('');
 
     const handleClose = () => {
         setShowAddUser(false);
@@ -77,17 +78,32 @@ const TableUsers = () => {
         setSortBy(sortBy);
         setSortField(sortField);
         let cloneListUser = _.cloneDeep(listUsers);
-        cloneListUser = _.orderBy(cloneListUser, [sortField],[sortBy]);
+        cloneListUser = _.orderBy(cloneListUser, [sortField], [sortBy]);
         setlistUsers(cloneListUser);
     }
-    console.log('check sort ', sortBy, sortField);
-
+    const handleSearch = debounce((event) => {
+        let term = event.target.value;
+        if (term) {
+            let cloneListUser = _.cloneDeep(listUsers);
+            cloneListUser = cloneListUser.filter(item => item.email.includes(term));
+            setlistUsers(cloneListUser);
+        } else {
+            getUsers(1);
+        }
+    },2000)
 
     return (
         <div className='mt-5'>
             <div className='d-flex justify-content-between m-2'>
                 <strong>List Users</strong>
                 <button className='btn btn-primary' onClick={handleShow}>Add new user</button>
+            </div>
+            <div className='col-4'>
+                <input className='form-control my-3' type='text' placeholder='Search user by email...'
+                    // value={keyword}
+                    onChange={(event) => { handleSearch(event) }}
+
+                />
             </div>
             <Table striped bordered hover>
                 <thead>
