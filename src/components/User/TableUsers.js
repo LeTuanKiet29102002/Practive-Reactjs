@@ -4,20 +4,36 @@ import Table from 'react-bootstrap/Table';
 import { fetchAllUser } from '../../services/UserServices';
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
+import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Tooltip } from "antd";
+import ModalEditUser from './ModalEditUser';
+import _ from 'lodash';
 
 const TableUsers = () => {
     const [listUsers, setlistUsers] = useState([]);
     const [TotalUsers, setTotalUsers] = useState(0);
     const [TotalPage, setTotalPage] = useState(0);
-    const [show, setShow] = useState(false);
+    const [showAddUser, setShowAddUser] = useState(false);
+    const [showEditUser, setShowEditUser] = useState(false);
+    const [dataUserEdit, setDataUserEdit] = useState({});
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShowAddUser(false);
+        setShowEditUser(false)
+    };
+    const handleShow = () => {
+        setShowAddUser(true);
+    }
 
     useEffect(() => {
         getUsers(1);
     }, []);
 
+    const handleEditUser = (user) => {
+        setDataUserEdit(user);
+        setShowEditUser(true);
+    }
+    
     const getUsers = async (page) => {
         let res = await fetchAllUser(page);
         if (res && res.data) {
@@ -26,12 +42,21 @@ const TableUsers = () => {
             setlistUsers(res.data);
         }
     }
+    
     const handlePageClick = (event) => {
         getUsers(+event.selected + 1);
     }
-    const handleListUsersChild = (newListUser )=>{
+    const handleListUsersChild = (newListUser) => {
         setlistUsers(newListUser)
     }
+    const handleEditUserFromModal = (user)=>{
+        let cloneListUser = _.cloneDeep(listUsers);
+        let index = listUsers.findIndex(item => item.id === user.id);
+        cloneListUser[index].first_name = user.first_name;
+        cloneListUser[index].email = user.email;
+        setlistUsers(cloneListUser);
+
+    }  
     return (
         <div className='mt-5'>
             <div className='d-flex justify-content-between m-2'>
@@ -55,11 +80,34 @@ const TableUsers = () => {
                             return (
                                 <tr key={`user-${index}`}>
                                     <td>{item.id}</td>
-                                    <td><img style={{ borderRadius: '50%', height: '30px', width: '30px' }} src={item.avatar} /></td>
+                                    <td><img alt='avatar' style={{ borderRadius: '50%', height: '30px', width: '30px' }} src={item.avatar} /></td>
                                     <td>{item.email}</td>
                                     <td>{item.first_name}</td>
                                     <td>{item.last_name}</td>
-                                    <td>Action</td>
+                                    <td className='d-flex justify-content-around'>
+                                        <Tooltip title="Xóa" >
+                                            <Button
+                                                shape="circle"
+                                                icon={<DeleteOutlined />}
+                                                onClick={() => this.handleDeleteTodo(item)}
+                                            />
+                                        </Tooltip>
+                                        <Tooltip title="Sửa">
+                                            <Button
+                                                className="btn-action"
+                                                shape="circle"
+                                                icon={<EditOutlined />}
+                                                onClick={()=>handleEditUser(item)}
+                                            />
+                                        </Tooltip>
+                                        <Tooltip title="Chi tiết">
+                                            <Button
+                                                shape="circle"
+                                                icon={<InfoCircleOutlined />}
+                                                onClick={() => this.handleDetailUser(item)}
+                                            />
+                                        </Tooltip>
+                                    </td>
                                 </tr>
                             )
                         })
@@ -87,12 +135,19 @@ const TableUsers = () => {
                 activeClassName="active"
                 renderOnZeroPageCount={null}
             />
-            <ModalAddNew 
-            handleShow={handleShow}
-            handleClose={handleClose}
-            show = {show}
-            handleListUsersChild = {handleListUsersChild}
-            listUsers = {listUsers}
+            <ModalAddNew
+                handleShow={handleShow}
+                handleClose={handleClose}
+                show={showAddUser}
+                handleListUsersChild={handleListUsersChild}
+                listUsers={listUsers}
+            />
+            <ModalEditUser
+                handleClose={handleClose}
+                show={showEditUser}
+                dataUserEdit={dataUserEdit}
+                handleEditUserFromModal={handleEditUserFromModal}
+
             />
         </div>
     )

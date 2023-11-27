@@ -8,5 +8,9 @@ const fetchAllUser = (page) => {
 const postCreateUser = (name, job)=>{
     return instance.post(`/api/users`,{name:name, job : job})
 }
+const putUpdateUser = (name, job )=>{
+    return instance.put(`/api/users/2`,{name,job})
+    
+}
 
-export { fetchAllUser ,postCreateUser };
+export { fetchAllUser ,postCreateUser, putUpdateUser };

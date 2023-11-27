@@ -22,7 +22,7 @@ const ModalAddNew = (props) => {
              let newdata = {
                 first_name : res.name,
                 last_name : res.name,
-                id: res.id,
+                id: +res.id,
                 email: res.job,
                 avatar:`https://i.pinimg.com/originals/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg`
              }
