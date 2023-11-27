@@ -12,5 +12,8 @@ const putUpdateUser = (name, job )=>{
     return instance.put(`/api/users/2`,{name,job})
     
 }
+const deleteUser = (id)=>{
+    return instance.delete(`/api/users/${id}`)
+}
 
-export { fetchAllUser ,postCreateUser, putUpdateUser };
+export { fetchAllUser ,postCreateUser, putUpdateUser, deleteUser };

@@ -8,6 +8,7 @@ import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined } from 
 import { Button, Tooltip } from "antd";
 import ModalEditUser from './ModalEditUser';
 import _ from 'lodash';
+import ModalConfirm from './ModalConfirm';
 
 const TableUsers = () => {
     const [listUsers, setlistUsers] = useState([]);
@@ -15,11 +16,14 @@ const TableUsers = () => {
     const [TotalPage, setTotalPage] = useState(0);
     const [showAddUser, setShowAddUser] = useState(false);
     const [showEditUser, setShowEditUser] = useState(false);
+    const [showDeleteUser, setShowDeleteUser] = useState(false);
     const [dataUserEdit, setDataUserEdit] = useState({});
+    const [dataUserDelete, setDataUserDelete] = useState({});
 
     const handleClose = () => {
         setShowAddUser(false);
-        setShowEditUser(false)
+        setShowEditUser(false);
+        setShowDeleteUser(false);
     };
     const handleShow = () => {
         setShowAddUser(true);
@@ -33,7 +37,10 @@ const TableUsers = () => {
         setDataUserEdit(user);
         setShowEditUser(true);
     }
-    
+    const handleDeleteUser = (user) => {
+        setShowDeleteUser(true)
+        setDataUserDelete(user)
+    }
     const getUsers = async (page) => {
         let res = await fetchAllUser(page);
         if (res && res.data) {
@@ -42,21 +49,29 @@ const TableUsers = () => {
             setlistUsers(res.data);
         }
     }
-    
+
     const handlePageClick = (event) => {
         getUsers(+event.selected + 1);
     }
     const handleListUsersChild = (newListUser) => {
         setlistUsers(newListUser)
     }
-    const handleEditUserFromModal = (user)=>{
+    const handleEditUserFromModal = (user) => {
         let cloneListUser = _.cloneDeep(listUsers);
         let index = listUsers.findIndex(item => item.id === user.id);
         cloneListUser[index].first_name = user.first_name;
         cloneListUser[index].email = user.email;
         setlistUsers(cloneListUser);
 
-    }  
+    }
+    const handleDeleteUserFromModal = (user) => {
+        let cloneListUser = _.cloneDeep(listUsers);
+        cloneListUser = listUsers.filter(item => item.id !== user.id);
+        setlistUsers(cloneListUser);
+
+    }
+
+
     return (
         <div className='mt-5'>
             <div className='d-flex justify-content-between m-2'>
@@ -89,7 +104,7 @@ const TableUsers = () => {
                                             <Button
                                                 shape="circle"
                                                 icon={<DeleteOutlined />}
-                                                onClick={() => this.handleDeleteTodo(item)}
+                                                onClick={() => { handleDeleteUser(item) }}
                                             />
                                         </Tooltip>
                                         <Tooltip title="Sửa">
@@ -97,7 +112,7 @@ const TableUsers = () => {
                                                 className="btn-action"
                                                 shape="circle"
                                                 icon={<EditOutlined />}
-                                                onClick={()=>handleEditUser(item)}
+                                                onClick={() => handleEditUser(item)}
                                             />
                                         </Tooltip>
                                         <Tooltip title="Chi tiết">
@@ -148,6 +163,12 @@ const TableUsers = () => {
                 dataUserEdit={dataUserEdit}
                 handleEditUserFromModal={handleEditUserFromModal}
 
+            />
+            <ModalConfirm
+                handleClose={handleClose}
+                show={showDeleteUser}
+                dataUserDelete={dataUserDelete}
+                handleDeleteUserFromModal={handleDeleteUserFromModal}
             />
         </div>
     )
