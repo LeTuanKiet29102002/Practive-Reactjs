@@ -4,11 +4,13 @@ import Table from 'react-bootstrap/Table';
 import { fetchAllUser } from '../../services/UserServices';
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
-import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined, SortDescendingOutlined, SortAscendingOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined, SortDescendingOutlined, SortAscendingOutlined, FolderOpenOutlined, FolderAddOutlined } from '@ant-design/icons';
 import { Button, Tooltip } from "antd";
 import ModalEditUser from './ModalEditUser';
 import _, { debounce } from 'lodash';
 import ModalConfirm from './ModalConfirm';
+import { CSVLink, CSVDownload } from 'react-csv';
+import Papa from 'papaparse';
 
 const TableUsers = () => {
     const [listUsers, setlistUsers] = useState([]);
@@ -22,6 +24,7 @@ const TableUsers = () => {
     const [sortBy, setSortBy] = useState('asc');
     const [sortField, setSortField] = useState('id');
     const [keyword, setKeyWord] = useState('');
+    const [dataExport, setDataExport] = useState([]);
 
     const handleClose = () => {
         setShowAddUser(false);
@@ -90,13 +93,41 @@ const TableUsers = () => {
         } else {
             getUsers(1);
         }
-    },2000)
+    }, 2000)
+    const getUserExport = (event, done) => {
+        let result = [];
+        if (listUsers && listUsers.length > 0) {
+            result.push(['ID', 'Avatar', 'Email', 'First Name', 'Last Name'])
+            listUsers.map((item, index) => {
+                let arr = [];
+                arr[0] = item.id;
+                arr[1] = item.avatar;
+                arr[2] = item.email;
+                arr[3] = item.first_name;
+                arr[4] = item.last_name;
+                result.push(arr);
+            })
+            setDataExport(result);
+            done();
+        }
+    }
 
     return (
         <div className='mt-5'>
             <div className='d-flex justify-content-between m-2'>
                 <strong>List Users</strong>
-                <button className='btn btn-primary' onClick={handleShow}>Add new user</button>
+                <div>
+                    <label htmlFor='import' className='btn btn-success mx-1'>
+                        <FolderAddOutlined />
+                    </label>
+                    <input id='import' type='file' multiple hidden />
+                    <CSVLink className='btn btn-warning mx-3' data={dataExport} filename={"my-file.csv"} target="_blank"
+                    onClick={getUserExport}
+                    asyncOnClick={true}
+                    ><FolderOpenOutlined /></CSVLink>
+                    {/* <CSVDownload data={listUsers} target="_blank" /> */}
+                    <button className='btn btn-primary' onClick={handleShow}>Add new user</button>
+                </div>
             </div>
             <div className='col-4'>
                 <input className='form-control my-3' type='text' placeholder='Search user by email...'
