@@ -1,5 +1,92 @@
 .app-container {
-  text-align: center;
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-top: 30px;
+
+    .title {
+      font-weight: 600;
+      font-size: 25px;
+      text-align: center;
+    }
+
+    .text {
+      font-weight: 600;
+      font-size: 16px;
+      padding-bottom: 5px;
+    }
+
+    input {
+      outline: none;
+      padding: 12px 5px;
+      background-color: #1618230f;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 3px;
+      width: 100%;
+
+
+      &:hover {
+        cursor: pointer;
+        background-color: #d2cccc;
+      }
+
+    }
+
+    .password {
+      position: relative;
+
+      .un-eye {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        cursor: pointer;
+      }
+      .eye {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        cursor: pointer;
+      }
+    }
+
+    button {
+      border-radius: 3px;
+      border: none;
+      padding: 10px;
+      outline: none;
+      margin-top: 10px;
+
+      &.active {
+
+        background-color: #fe2c55;
+        color: white;
+      }
+
+    }
+
+    // button[disabled],
+    // button:disabled {
+    //   cursor: not-allowed;
+
+    // }
+
+    .back {
+      text-align: center;
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      .icon-back {
+        font-size: 10px;
+        text-align: center;
+        line-height: 1.5;
+      }
+    }
+  }
 }
 
 .App-logo {
@@ -32,9 +119,8 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
-
-

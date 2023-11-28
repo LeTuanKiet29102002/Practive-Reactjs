@@ -8,6 +8,7 @@ import Home from './components/Home/Home';
 import {
   Route, Routes
 } from "react-router-dom";
+import Login from './components/Login/Login';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           <Route path="/users" element={<TableUsers />} />
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Container>
       <ToastContainer
