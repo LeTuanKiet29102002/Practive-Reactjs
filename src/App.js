@@ -9,8 +9,18 @@ import {
   Route, Routes
 } from "react-router-dom";
 import Login from './components/Login/Login';
-
+import { UserContext } from './context/UserContext';
+import {useContext,useEffect} from 'react'
 function App() {
+  const { user,loginContext} = useContext(UserContext);
+  console.log('check user , ',user);
+  useEffect(() => {
+        if(localStorage.getItem('token')){
+          loginContext(localStorage.getItem('email'),
+          localStorage.getItem('token')
+          );
+        }
+    }, [])
 
   return (
     <div className="app-container">

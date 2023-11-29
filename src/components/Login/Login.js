@@ -1,8 +1,10 @@
 import { LeftOutlined, EyeInvisibleOutlined, EyeOutlined, LoadingOutlined } from '@ant-design/icons';
-import { useState , useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { LoginApi } from '../../services/UserServices';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext';
+import {useContext} from 'react'
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -10,13 +12,14 @@ const Login = () => {
     const [isShowPassword, setIsShowPassword] = useState(false);
     const [loadingApi, setLoadingApi] = useState(false);
     const navigate = useNavigate();
+    const { loginContext} = useContext(UserContext);
 
-    useEffect(()=>{
-        let token = localStorage.getItem('token');
-        if(token ){
-            navigate('/')
-        }
-    },[])
+    // useEffect(() => {
+    //     let token = localStorage.getItem('token');
+    //     if (token) {
+    //         navigate('/')
+    //     }
+    // }, [])
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -24,12 +27,12 @@ const Login = () => {
             return;
         }
         setLoadingApi(true);
-        let res = await LoginApi(email, password);
+        let res = await LoginApi(email.trim(), password);
         // console.log('check res', res);
         if (res && res.token) {
-            localStorage.setItem('token', res.token);
+            loginContext(email,res.token);
             navigate('/');
-            toast.success('Login successful!');
+
         } else {
             if (res && res.status === 400) {
                 toast.error(res.data.error);
@@ -37,6 +40,12 @@ const Login = () => {
         }
         setLoadingApi(false)
     }
+
+    const handleGoBack = () => {
+        navigate('/');
+    
+      }
+
     return (
         <div className="login-container col-12 col-sm-4">
             <div className="title">Log in</div>
@@ -62,7 +71,7 @@ const Login = () => {
                 {loadingApi && <LoadingOutlined />}
                 &nbsp;&nbsp;Login
             </button>
-            <div className="back ">
+            <div className="back " onClick={handleGoBack}>
                 <LeftOutlined className='icon-back' />
                 Go back
             </div>
