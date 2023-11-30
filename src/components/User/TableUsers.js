@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import { fetchAllUser } from '../../services/UserServices';
+import { fetchAllUser, getAUser } from '../../services/UserServices';
 import ReactPaginate from 'react-paginate';
 import ModalAddNew from './ModalAddNew';
 import { EditOutlined, DeleteOutlined, CheckOutlined, InfoCircleOutlined, SortDescendingOutlined, SortAscendingOutlined, FolderOpenOutlined, FolderAddOutlined } from '@ant-design/icons';
@@ -12,6 +12,9 @@ import ModalConfirm from './ModalConfirm';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Papa from 'papaparse';
 import { toast } from 'react-toastify';
+import ModalDetailUser from './ModalDetailUser';
+import { useNavigate } from 'react-router-dom';
+
 
 const TableUsers = () => {
     const [listUsers, setlistUsers] = useState([]);
@@ -26,6 +29,9 @@ const TableUsers = () => {
     const [sortField, setSortField] = useState('id');
     const [keyword, setKeyWord] = useState('');
     const [dataExport, setDataExport] = useState([]);
+    const navigate = useNavigate();
+
+
 
     const handleClose = () => {
         setShowAddUser(false);
@@ -39,6 +45,11 @@ const TableUsers = () => {
     useEffect(() => {
         getUsers(1);
     }, []);
+
+    const handleDetailUser = async (user) => {
+        navigate(`/users/${user.id}`);
+    };
+
 
     const handleEditUser = (user) => {
         setDataUserEdit(user);
@@ -165,7 +176,6 @@ const TableUsers = () => {
             });
         }
 
-
     }
 
     return (
@@ -257,7 +267,7 @@ const TableUsers = () => {
                                             <Button
                                                 shape="circle"
                                                 icon={<InfoCircleOutlined />}
-                                                onClick={() => this.handleDetailUser(item)}
+                                                onClick={() => handleDetailUser(item)}
                                             />
                                         </Tooltip>
                                     </td>
@@ -308,6 +318,7 @@ const TableUsers = () => {
                 dataUserDelete={dataUserDelete}
                 handleDeleteUserFromModal={handleDeleteUserFromModal}
             />
+
         </div>
     )
 }

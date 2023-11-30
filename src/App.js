@@ -10,29 +10,32 @@ import {
 } from "react-router-dom";
 import Login from './components/Login/Login';
 import { UserContext } from './context/UserContext';
-import {useContext,useEffect} from 'react'
+import { useContext, useEffect } from 'react'
+import ModalDetailUser from './components/User/ModalDetailUser';
+import './App.scss'
 function App() {
-  const { user,loginContext} = useContext(UserContext);
-  console.log('check user , ',user);
+  const { user, loginContext } = useContext(UserContext);
+  console.log('check user , ', user);
   useEffect(() => {
-        if(localStorage.getItem('token')){
-          loginContext(localStorage.getItem('email'),
-          localStorage.getItem('token')
-          );
-        }
-    }, [])
+    if (localStorage.getItem('token')) {
+      loginContext(localStorage.getItem('email'),
+        localStorage.getItem('token')
+      );
+    }
+  }, [])
 
   return (
     <div className="app-container">
-      <Header/>
+        <Header />
+        <Container>
+          <Routes>
+            <Route path="/users" element={<TableUsers />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/users/:id" element={<ModalDetailUser />} />
+          </Routes>
+        </Container>
 
-      <Container>
-        <Routes>
-          <Route path="/users" element={<TableUsers />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      </Container>
       <ToastContainer
         position="top-right"
         autoClose={5000}
