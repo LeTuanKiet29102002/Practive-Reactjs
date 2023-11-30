@@ -41,6 +41,12 @@ const Login = () => {
         setLoadingApi(false)
     }
 
+    const handlePressEnter = async(event)=>{
+        if(event && event.key ==='Enter'){
+            await handleLogin();
+        }
+    }
+
     const handleGoBack = () => {
         navigate('/');
     
@@ -58,6 +64,7 @@ const Login = () => {
                 <input type={isShowPassword === true ? 'text' : 'password'} placeholder="Password...(tùy)"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
+                    onKeyDown={(event)=>{handlePressEnter(event)}}
                 />
                 <i className={isShowPassword === true ? 'eye' : 'un-eye'} onClick={() => setIsShowPassword(!isShowPassword)}>
                     {isShowPassword === true ? <EyeOutlined className='eye' /> : <EyeInvisibleOutlined className='un-eye' />}

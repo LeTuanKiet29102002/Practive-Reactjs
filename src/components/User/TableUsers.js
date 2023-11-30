@@ -197,87 +197,90 @@ const TableUsers = () => {
                     <button className='btn btn-primary' onClick={handleShow}>Add new user</button>
                 </div>
             </div>
-            <div className='col-4'>
+            <div className='col-12 col-sm-4'>
                 <input className='form-control my-3' type='text' placeholder='Search user by email...'
                     // value={keyword}
                     onChange={(event) => { handleSearch(event) }}
 
                 />
             </div>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th className='d-flex justify-content-between'>
-                            <span>ID</span>
-                            <span>
-                                <SortAscendingOutlined
-                                    onClick={() => handleSort('asc', 'id')}
-                                />
-                                <SortDescendingOutlined
-                                    onClick={() => handleSort('desc', 'id')}
+            <div className='customize-table' style={{ width: 'inherit', overflowX: 'auto' }}>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th className='d-flex justify-content-between'>
+                                <span>ID</span>
+                                <span>
+                                    <SortAscendingOutlined
+                                        onClick={() => handleSort('asc', 'id')}
+                                    />
+                                    <SortDescendingOutlined
+                                        onClick={() => handleSort('desc', 'id')}
 
-                                />
-                            </span>
-                        </th>
-                        <th>Avatar</th>
-                        <th>Email</th>
-                        <th className='d-flex justify-content-between'>
-                            <span>First Name</span>
-                            <span>
-                                <SortAscendingOutlined
-                                    onClick={() => handleSort('asc', 'first_name')}
-                                />
-                                <SortDescendingOutlined
-                                    onClick={() => handleSort('desc', 'first_name')}
+                                    />
+                                </span>
+                            </th>
+                            <th>Avatar</th>
+                            <th>Email</th>
+                            <th className='d-flex justify-content-between'>
+                                <span>First Name</span>
+                                <span>
+                                    <SortAscendingOutlined
+                                        onClick={() => handleSort('asc', 'first_name')}
+                                    />
+                                    <SortDescendingOutlined
+                                        onClick={() => handleSort('desc', 'first_name')}
 
-                                />
-                            </span>
-                        </th>
-                        <th>Last Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listUsers && listUsers.length > 0 &&
-                        listUsers.map((item, index) => {
-                            return (
-                                <tr key={`user-${index}`}>
-                                    <td>{item.id}</td>
-                                    <td><img alt='avatar' style={{ borderRadius: '50%', height: '30px', width: '30px' }} src={item.avatar} /></td>
-                                    <td>{item.email}</td>
-                                    <td>{item.first_name}</td>
-                                    <td>{item.last_name}</td>
-                                    <td className='d-flex justify-content-around'>
-                                        <Tooltip title="Xóa" >
-                                            <Button
-                                                shape="circle"
-                                                icon={<DeleteOutlined />}
-                                                onClick={() => { handleDeleteUser(item) }}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip title="Sửa">
-                                            <Button
-                                                className="btn-action"
-                                                shape="circle"
-                                                icon={<EditOutlined />}
-                                                onClick={() => handleEditUser(item)}
-                                            />
-                                        </Tooltip>
-                                        <Tooltip title="Chi tiết">
-                                            <Button
-                                                shape="circle"
-                                                icon={<InfoCircleOutlined />}
-                                                onClick={() => handleDetailUser(item)}
-                                            />
-                                        </Tooltip>
-                                    </td>
-                                </tr>
-                            )
-                        })
-                    }
+                                    />
+                                </span>
+                            </th>
+                            <th>Last Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listUsers && listUsers.length > 0 &&
+                            listUsers.map((item, index) => {
+                                return (
+                                    <tr key={`user-${index}`}>
+                                        <td>{item.id}</td>
+                                        <td><img alt='avatar' style={{ borderRadius: '50%', height: '30px', width: '30px' }} src={item.avatar} /></td>
+                                        <td>{item.email}</td>
+                                        <td>{item.first_name}</td>
+                                        <td>{item.last_name}</td>
+                                        <td className='d-flex justify-content-around'>
+                                            <Tooltip title="Xóa" >
+                                                <Button
+                                                    shape="circle"
+                                                    icon={<DeleteOutlined />}
+                                                    onClick={() => { handleDeleteUser(item) }}
+                                                />
+                                            </Tooltip>
+                                            <Tooltip title="Sửa">
+                                                <Button
+                                                    className="btn-action"
+                                                    shape="circle"
+                                                    icon={<EditOutlined />}
+                                                    onClick={() => handleEditUser(item)}
+                                                />
+                                            </Tooltip>
+                                            <Tooltip title="Chi tiết">
+                                                <Button
+                                                    shape="circle"
+                                                    icon={<InfoCircleOutlined />}
+                                                    onClick={() => handleDetailUser(item)}
+                                                />
+                                            </Tooltip>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
 
-                </tbody>
-            </Table>
+                    </tbody>
+                </Table>
+            </div>
+
             <ReactPaginate
                 nextLabel="next >"
                 onPageChange={handlePageClick}

@@ -4,6 +4,7 @@ import Login from '../components/Login/Login';
 import Home from '../components/Home/Home';
 import PrivateRoute from "./PrivateRoutes";
 import TableUsers from "../components/User/TableUsers";
+import NotFound from "../components/NotFound/NotFound";
 
 const AppRouters = () => {
     return (
@@ -16,6 +17,9 @@ const AppRouters = () => {
                     <PrivateRoute >
                         <TableUsers />
                     </PrivateRoute>} />
+
+                <Route path="*" element={<NotFound />} />
+
             </Routes>
 
         </div>
