@@ -1,18 +1,15 @@
 import logo from './logo.svg';
 import './App.scss';
 import Header from './components/Header';
-import TableUsers from './components/User/TableUsers';
 import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
-import Home from './components/Home/Home';
 import {
   Route, Routes
 } from "react-router-dom";
-import Login from './components/Login/Login';
 import { UserContext } from './context/UserContext';
 import { useContext, useEffect } from 'react'
-import ModalDetailUser from './components/User/ModalDetailUser';
 import './App.scss'
+import AppRouters from './routes/AppRoutes';
 function App() {
   const { user, loginContext } = useContext(UserContext);
   console.log('check user , ', user);
@@ -28,12 +25,7 @@ function App() {
     <div className="app-container">
         <Header />
         <Container>
-          <Routes>
-            <Route path="/users" element={<TableUsers />} />
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/users/:id" element={<ModalDetailUser />} />
-          </Routes>
+          <AppRouters></AppRouters>
         </Container>
 
       <ToastContainer
