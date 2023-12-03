@@ -4,41 +4,40 @@ import { LoginApi } from '../../services/UserServices';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
-import {useContext} from 'react'
+import {useContext} from 'react';
+import { handleLoginRedux } from '../../redux/actions/userAction';
+import { useDispatch,useSelector } from 'react-redux';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isShowPassword, setIsShowPassword] = useState(false);
-    const [loadingApi, setLoadingApi] = useState(false);
+    const isLoading = useSelector(state=>state.user.isLoading);
+    const account = useSelector(state=>state.user.account);
     const navigate = useNavigate();
-    const { loginContext} = useContext(UserContext);
+    // const { loginContext} = useContext(UserContext);
+    const dispatch = useDispatch()
 
     // useEffect(() => {
     //     let token = localStorage.getItem('token');
     //     if (token) {
     //         navigate('/')
     //     }
-    // }, [])
+    // }, []);
+    useEffect(() => {
+        if (account && account.auth===true) {
+            navigate('/')
+        }
+    }, [account]);
 
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error('Email or password is empty!');
             return;
         }
-        setLoadingApi(true);
-        let res = await LoginApi(email.trim(), password);
-        // console.log('check res', res);
-        if (res && res.token) {
-            loginContext(email,res.token);
-            navigate('/');
 
-        } else {
-            if (res && res.status === 400) {
-                toast.error(res.data.error);
-            }
-        }
-        setLoadingApi(false)
+        dispatch(handleLoginRedux(email,password))
+
     }
 
     const handlePressEnter = async(event)=>{
@@ -75,7 +74,7 @@ const Login = () => {
                 disabled={email && password ? false : true}
                 onClick={() => { handleLogin() }}
             >
-                {loadingApi && <LoadingOutlined />}
+                {isLoading && <LoadingOutlined />}
                 &nbsp;&nbsp;Login
             </button>
             <div className="back " onClick={handleGoBack}>
